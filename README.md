@@ -8,7 +8,6 @@ Add summary of the project.
 This repository contains code for a machine learning pipeline with the following structure:
 
 #### Data
-- **downloading**: Contains the data as received by the FAINT project team 
 - **processing**: Contains the code to clean the raw data
 
 #### Processing
