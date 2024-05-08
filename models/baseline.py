@@ -21,46 +21,39 @@ def main():
     # Set logging level to INFO
     logging.getLogger().setLevel(logging.INFO)
 
-    file_path = '/Users/dionnespaltman/Desktop/downloading/big_dataframe.pkl'
+    file_path = '/Users/dionnespaltman/Desktop/V3/merged_df.csv'
     
-    # Open the pickle file in read-binary mode
-    with open(file_path, "rb") as f:
-        # Load the object from the pickle file
-        data = pickle.load(f)
-    
-    # Load the file containing information about fainting occurrences and gender
-    labels = pd.read_csv(data_dir + 'labels.csv')
+    data = pd.read_csv(file_path, sep=',')
 
-    print(labels)
+    # Separate features (action units) and target variable (fainting occurrence)
+    # Do I have to drop ID too? 
+    X = data.drop(['VVR_group', 'sum_12', 'sum_4567', 'sum_456', 'Condition', 'VVR_1', 'VVR_2'], axis=1)
+    y = data['VVR_group']
+
+    print(X)
+    print(y)
     
-    # # Merge the datasets based on a common identifier (e.g., participant ID)
-    # merged_data = pd.merge(data, labels, on='participant_id')
+    # This can be deleted I think? 
+    # Define a pipeline for a dummy classifier that predicts the most frequent class
+    dummy = make_pipeline(StandardScaler(), DummyClassifier(strategy='most_frequent'))
     
-    # # Separate features (action units) and target variable (fainting occurrence)
-    # X = merged_data.drop(['fainted'], axis=1)
-    # y = merged_data['fainted']
+    # Define a pipeline for a logistic regression classifier
+    logistic = make_pipeline(StandardScaler(), LogisticRegression())
     
-    # # This can be deleted I think? 
-    # # Define a pipeline for a dummy classifier that predicts the most frequent class
-    # dummy = make_pipeline(StandardScaler(), DummyClassifier(strategy='most_frequent'))
+    # Create a 5-fold cross-validation iterator
+    kf = KFold(n_splits=5, shuffle=True, random_state=123)
     
-    # # Define a pipeline for a logistic regression classifier
-    # logistic = make_pipeline(StandardScaler(), LogisticRegression())
+    # Log the fitting of models using cross-validation
+    logging.info("Fitting models using 5-fold cross-validation")
     
-    # # Create a 5-fold cross-validation iterator
-    # kf = KFold(n_splits=5, shuffle=True, random_state=123)
+    # This can also be deleted 
+    # Evaluate the dummy regressor
+    logging.info("Evaluation for Dummy Regressor:")
+    evaluation(dummy, X, y)
     
-    # # Log the fitting of models using cross-validation
-    # logging.info("Fitting models using 5-fold cross-validation")
-    
-    # # This can also be deleted 
-    # # Evaluate the dummy regressor
-    # logging.info("Evaluation for Dummy Regressor:")
-    # evaluation(dummy, X, y)
-    
-    # # Evaluate the logistic regression classifier
-    # logging.info("Evaluation for logistic regression classifier:")
-    # evaluation(logistic, X, y)
+    # Evaluate the logistic regression classifier
+    logging.info("Evaluation for logistic regression classifier:")
+    evaluation(logistic, X, y)
 
 if __name__ == "__main__":
     main()
