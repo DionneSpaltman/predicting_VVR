@@ -12,7 +12,12 @@ This repository contains code for a machine learning pipeline with the following
 ```
 .
 ├── models
-│   └── intensity_action_units          # The models that included both the VVR measurements from stage 1 and 2 and the action units data 
+│   └── intensity_and_VVR               # The models that included both the VVR measurements from stage 1 and 2 and the action units data 
+│       ├── nn.ipynb                    # Neural network 
+│       ├── rf.ipynb                    # Random forest
+│       ├── svm.ipynb                   # Support vector machine
+│       └── xgboost.ipynb               # XGBoost
+│   └── only_intensity                  # The models that included only the action units data 
 │       ├── nn.ipynb                    # Neural network 
 │       ├── rf.ipynb                    # Random forest
 │       ├── svm.ipynb                   # Support vector machine
